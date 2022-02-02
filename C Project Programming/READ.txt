@@ -1,0 +1,15 @@
+C Programming Project!!
+--------------------------
+ICT_Restaurant
+
+	ICT_Restaurant is once a program that was created for use with the restaurant system. The employee can book
+
+tables, order foods, check bills and check the status in each table. The program can save data form this program in
+
+data.exe after running this program, like user books table's 1 and customer orders food and drink, after user inputs
+
+data in this program and exit program by type "0", the program will save data in data.exe. When user run the program again,
+
+the program will read data.exe and push the table's 1 data to the program.
+
+    This program is my first C project and I write it by myself since I was a year 1 student.

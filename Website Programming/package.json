@@ -1,0 +1,25 @@
+{
+  "name": "web_proj_2",
+  "version": "1.0.0",
+  "description": "Project2",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "author": "Group6",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.19.2",
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "movielens": "^0.3.0",
+    "mysql": "^2.18.1",
+    "path": "^0.12.7",
+    "qs": "^6.9.4",
+    "spotify-web-api-node": "^4.0.0",
+    "twit": "^2.2.11"
+  }
+}

@@ -1,0 +1,3 @@
+What is Huffman coding, you can read here
+
+https://www.geeksforgeeks.org/huffman-coding-greedy-algo-3/

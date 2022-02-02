@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Login</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <style>
+        .bs-example {
+            margin: 20px;
+        }
+    </style>
+    <script type="application/javascript">
+        var LoginStatus = 0;
+        function LoginFunc() {
+            var In = document.getElementById("optionIn");
+            var Out = document.getElementById("optionOut");
+            var Box = document.getElementById("optionBox");
+
+            if(In.style.display === "none"){
+                In.style.display = "block";
+                Box.style.display = "block";
+                Out.style.display = "none";
+            }
+            else {
+                In.style.display = "none";
+                Box.style.display = "none";
+                Out.style.display = "block";
+            }
+        }
+
+        async function CallWS(url, method, SendData = {}) {
+            let data;
+            let response
+            if(method=="GET"){
+                response = await fetch(url, {
+                    method: method,
+                });
+            }
+            else{
+                response = await fetch(url, {
+                    method: method,
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(SendData)
+                });
+            }
+            data = await response.json();
+            return data;
+        }
+
+        $(document).ready(() => {
+            var User, Pass;
+
+            function clearInput() {
+                $("#username").val('');
+                $("#password").val('');
+            }
+
+            $("#login").click(() => {
+                User = $("#username").val();
+                Pass = $("#password").val();
+                let SendIn = {
+                    USER: {
+                        username: User,
+                        password: Pass
+                    }
+                };
+                CallWS("http://localhost:8080/login", "POST", SendIn).then((SendOut) => {
+                    var output = "<br>";
+                    alert(SendOut.message);
+                    LoginStatus = SendOut.data;
+                    if(LoginStatus>0) LoginFunc();
+                    clearInput();
+                    if(SendOut.data == 1){
+                        output += '<a href="Main" class="btn btn-primary">Go To Main</a>';
+                        output += '&nbsp;&nbsp;&nbsp;&nbsp;';
+                        output += '<a href="SettingUser" class="btn btn-primary">Setting User</a>';
+                    }
+                    else if(SendOut.data == 2){
+                        output += '<a href="Main" class="btn btn-primary">Go To Main Page</a>';
+                    }
+                    $("#output").html(output);
+                });
+            });
+
+            $("#logout").click(() => {
+                CallWS("http://localhost:8080/logout", "GET").then((SendOut) => {
+                    alert(SendOut.message);
+                    LoginStatus = SendOut.data;
+                    LoginFunc();
+                    clearInput();
+                });
+            });
+        });
+    </script>
+</head>
+
+<body>
+    <div class="bs-example">
+        <div id="optionOut" style="display: none">
+            <input type="button" class="btn btn-primary" value="Logout" id="logout">
+            <div id="output"></div>
+        </div>
+        <div id="optionBox" style="display: block">
+            <form action="/examples/actions/confirmation.php" method="post">
+                <div class="form-group row">
+                    <label for="muname" class="col-sm-2 col-form-label">Username:</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" id="username">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="muname" class="col-sm-2 col-form-label">Password:</label>
+                    <div class="col-sm-10">
+                        <input type="password" class="form-control" id="password">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-sm-10 offset-sm-2">
+                        <div id="optionIn" style="display: block">
+                            <input type="button" class="btn btn-primary" value="Login" id="login">
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+
+</html>

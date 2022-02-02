@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+
+<head>
+    <title>Main Page</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script type="application/javascript">
+        async function CallWS(url, method, SendData = {}) {
+            let data;
+            let response
+            if(method=="GET"){
+                response = await fetch(url, {
+                    method: method,
+                });
+            }
+            else{
+                response = await fetch(url, {
+                    method: method,
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(SendData)
+                });
+            }
+            data = await response.json();
+            return data;
+        }
+        $(document).ready(() => {
+            var API_KEY = "AIzaSyBUAbyORD-HkejvxrAbAXK-SNeAzgpQhgw";
+
+            function LoginFunc() {
+            var In = document.getElementById("optionIn");
+
+            if(In.style.display === "none"){
+                In.style.display = "block";
+            }
+            else {
+                In.style.display = "none";
+            }
+        }
+
+            function videoSearch(key, search, maxRe) {
+                var video = '';
+                var videos = $("#videos");
+                var info = '';
+                var infos = $("#infos");
+                videos.empty()
+                infos.empty()
+                $.get("https://www.googleapis.com/youtube/v3/search?key="+ key + "&type=video&part=snippet&maxResults=" + maxRe + "&q=" + search, function(data){ //get the link of video
+                    data.items.forEach(item => {
+                        video = `<iframe width="420" height = "315" src= "http://www.youtube.com/embed/${item.id.videoId}" frameborder="0" allowfullscreen></iframe>` //load video
+                        videos.append(video)
+                        info = '<br>' +item.snippet.title + '<br>' + "<a href= https://youtu.be/"+item.id.videoId + '>'+"https://youtu.be/"+item.id.videoId +'</a><br>'
+                        videos.append(info)
+                    });
+                })
+            }
+
+            $("#searchBUT").click((event)=>{
+                var search = $("#search").val();
+                let movie_data = {
+                    movie: {
+                        moviename: search
+                    }
+                };
+                CallWS("http://localhost:8080/Search", "POST", movie_data).then((SendOut) => {
+                    var output = "<h1>" + SendOut.data.movie.title + "</h1>";
+                    output += "<br>" + SendOut.data.movie.plotSummary;
+                    $("#output1").html(output);
+                });
+                CallWS("http://localhost:8080/Tweet", "POST", movie_data).then((SendOut) => {
+                    var output = SendOut.data;
+                    $("#output2").html(output);
+                });
+                CallWS("http://localhost:8080/Music", "POST", movie_data).then((SendOut) => {
+                    var output ="";
+                    output = `<iframe id="spot" src="https://open.spotify.com/embed/album/${SendOut.data}" width="300" height="380" frameborder="0" allowtransparency="true"></iframe>`;
+                    $("#output3").html(output);
+                    console.log(output);
+                });
+                videoSearch(API_KEY, search+"trailer", 1);
+            });
+
+            $("#logout").click(() => {
+                CallWS("http://localhost:8080/logout", "GET").then((SendOut) => {
+                    alert(SendOut.message);
+                });
+            });
+        });
+    </script>
+</head>
+
+<body>
+    <div classs="container">
+        <a class="btn btn-primary" href="/" id="logout">Logout</a>
+        <h1>OurTube</h1>
+        <br>
+        <form>
+            <div class="form-group">
+                <input type="text" class="form-control" id="search">
+            </div>
+            <div class="form-group">
+                <input type="button" class="btn btn-danger" id="searchBUT" value="Search">
+            </div>
+        </form>
+        <div id="output1"></div>
+        <div class="row">
+            <div class="col-md-12" id="videos"></div>
+        </div>
+    </div>
+    <!-- <iframe id="spot" src="https://open.spotify.com/embed/album/" width="300" height="380" frameborder="0" allowtransparency="true"></iframe> -->
+    <div id="output3"></div>
+    <div id="output2"></div>
+</body>
+</html>
