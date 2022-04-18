@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "682229359889",
+    "project_id": "nigthingle",
+    "storage_bucket": "nigthingle.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:682229359889:android:a88aee1ad54a7ca03898b0",
+        "android_client_info": {
+          "package_name": "com.example.nightingale_project"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "682229359889-3l08l0aifr65q4o4m08rmvniiaac8fim.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCLNr-5R5gpMUHUvjY5cxNtBj3ACnI8V3Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "682229359889-3l08l0aifr65q4o4m08rmvniiaac8fim.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "682229359889-vtldiagq5dnpj57tgsj0vpd5358u5roc.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.muict.nightingle",
+                "app_store_id": "1212312121"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
